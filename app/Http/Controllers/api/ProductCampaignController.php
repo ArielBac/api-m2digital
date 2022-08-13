@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Campaign;
+use App\Models\Product;
 use App\Models\ProductCampaign;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ProductCampaignController extends Controller
@@ -15,7 +18,9 @@ class ProductCampaignController extends Controller
      */
     public function index()
     {
-        //
+        $productsCampaigns = ProductCampaign::all();
+
+        return response()->json($productsCampaigns, 200);
     }
 
     /**
@@ -26,48 +31,88 @@ class ProductCampaignController extends Controller
      */
     public function store(Request $request)
     {
-        // code here
-        
-        if ($request->discount != null) {
+        $productCampaign = new ProductCampaign;
 
+        $request->validate($productCampaign->rules());
+
+        if ($request->discount) {
+            $productPrice = Product::findOrFail($request->product_id)->price;
+
+            $response = $productCampaign->create([
+                'product_id' => $request->product_id,
+                'campaign_id'=> $request->campaign_id,
+                'discount' => $request->discount,
+                'price_with_discount' => $productPrice - $request->discount,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+        } else {
+            $response = $productCampaign->create($request->all());
         }
+
+        return response()->json($response, 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ProductCampaign  $productCampaign
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(ProductCampaign $productCampaign)
+    public function show($id)
     {
-        //
+        $productCampaign = ProductCampaign::findOrFail($id);
+
+        return response()->json($productCampaign, 200);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ProductCampaign  $productCampaign
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProductCampaign $productCampaign)
+    public function update(Request $request, $id)
     {
-        //
+        $productCampaign = ProductCampaign::find($id);
+
+        if ($productCampaign === null) {
+            return response()->json(['error' => 'Impossível realizar a atualização, o recurso solicitado não existe.'], 404);
+        }
+
+        if ($request->discount) {
+            $product_id = $productCampaign->product_id;
+            $productPrice = Product::findOrFail($product_id)->price;
+
+            $productCampaign->update([
+                'discount' => $request->discount,
+                'price_with_discount' => $productPrice - $request->discount,
+                'updated_at' => Carbon::now(),
+            ]);
+        } else {
+            return response()->json(['error' => 'Impossível realizar a atualização, informe o novo desconto.'], 422);
+        }
+
+        return response()->json($productCampaign, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ProductCampaign  $productCampaign
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductCampaign $productCampaign)
+    public function destroy($id)
     {
-        //
-    }
+        $productCampaign = ProductCampaign::find($id);
 
-    public function addProductCampaignDiscount() {
-        
+        if ($productCampaign === null) {
+            return response()->json(['error' => 'Impossível realizar a atualização, o recurso solicitado não existe.'], 404);
+        }
+
+        $productCampaign->delete();
+
+        return response()->json(['message' => 'Exclusão realizada com sucesso.'], 200);
     }
 }

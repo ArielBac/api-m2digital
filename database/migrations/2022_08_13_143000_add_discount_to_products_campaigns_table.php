@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\DBAL\TimestampType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +15,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('products_campaigns', function (Blueprint $table) {
-            $table->float('discount')->nullable();
+            $table->unsignedFloat('discount')->nullable();
+            $table->unsignedFloat('price_with_discount')->nullable();
         });
     }
 
@@ -27,6 +29,7 @@ return new class extends Migration
     {
         Schema::table('products_campaigns', function (Blueprint $table) {
             $table->dropColumn('discount');
+            $table->dropColumn('price_with_discount');
         });
     }
 };

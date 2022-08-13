@@ -15,7 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with('campaigns')->get();
 
         return response()->json($products, 200);
     }
@@ -41,7 +41,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('campaigns')->findOrFail($id);
 
         return response()->json($product, 200);
     }

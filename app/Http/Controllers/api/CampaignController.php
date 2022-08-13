@@ -15,7 +15,7 @@ class CampaignController extends Controller
      */
     public function index()
     {
-        $campaigns = Campaign::all();
+        $campaigns = Campaign::with('products')->get();
 
         return response()->json($campaigns, 200);
     }
@@ -43,7 +43,7 @@ class CampaignController extends Controller
      */
     public function show($id)
     {
-        $campaign = Campaign::findOrFail($id);
+        $campaign = Campaign::with('products')->findOrFail($id);
 
         return response()->json($campaign, 200);
     }

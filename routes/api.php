@@ -3,8 +3,8 @@
 use App\Http\Controllers\api\CampaignController;
 use App\Http\Controllers\api\CityController;
 use App\Http\Controllers\api\CityGroupController;
+use App\Http\Controllers\api\ProductCampaignController;
 use App\Http\Controllers\api\ProductController;
-use App\Models\ProductCampaign;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +36,6 @@ Route::apiResource('campaigns', CampaignController::class);
 Route::apiResource('products', ProductController::class);
 
 // ProductCampaign Routes
-Route::apiResource('products-campaigns', ProductCampaign::class);
+Route::apiResource('products-campaigns', ProductCampaignController::class);
 
 

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('product');
             $table->string('description');
-            $table->float('price');
+            $table->unsignedFloat('price');
             $table->timestamps();
         });
     }

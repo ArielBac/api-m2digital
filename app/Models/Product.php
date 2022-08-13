@@ -27,8 +27,8 @@ class Product extends Model
         ];
     }
 
-    // public function campaign()
-    // {
-    //     return $this->belongsToMany('App\Models\Campaign');
-    // }
+    public function campaigns()
+    {
+        return $this->belongsToMany(Campaign::class, 'products_campaigns', 'product_id', 'campaign_id');
+    }
 }

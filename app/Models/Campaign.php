@@ -23,8 +23,8 @@ class Campaign extends Model
         ];
     }
 
-    public function cityGroups()
+    public function products()
     {
-        return $this->belongsTo(CityGroup::class, 'city_group_id', 'id');
+        return $this->belongsToMany(Product::class, 'products_campaigns', 'campaign_id', 'product_id');
     }
 }
