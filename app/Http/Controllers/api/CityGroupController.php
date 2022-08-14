@@ -30,9 +30,9 @@ class CityGroupController extends Controller
     {
         $cityGroup = new CityGroup;
 
-        $request->validate($cityGroup->rules());
+        $request->validate($cityGroup->rules(), $cityGroup->feedback());
 
-        return response()->json($cityGroup->create($request->all()), 201);
+        return response()->json($cityGroup->create($request->all()),201);
     }
 
     /**
@@ -43,7 +43,11 @@ class CityGroupController extends Controller
      */
     public function show($id)
     {
-        $cityGroup = CityGroup::with('cities', 'campaign')->findOrFail($id);
+        $cityGroup = CityGroup::with('cities', 'campaign')->find($id);
+
+        if ($cityGroup === null) {
+            return response()->json(['error' => 'Grupo não encontrado.'], 404);
+        }
 
         return response()->json($cityGroup, 200);
     }
@@ -57,15 +61,13 @@ class CityGroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $cityGroup = new CityGroup;
-
-        $request->validate($cityGroup->rules());
-
-        $cityGroup->find($id);
+        $cityGroup = CityGroup::find($id);
 
         if ($cityGroup === null) {
             return response()->json(['error' => 'Impossível realizar a atualização, o recurso solicitado não existe.'], 404);
         }
+
+        $request->validate($cityGroup->rules(), $cityGroup->feedback());
 
         $cityGroup->update($request->all());
 
@@ -83,11 +85,11 @@ class CityGroupController extends Controller
         $cityGroup = CityGroup::find($id);
 
         if ($cityGroup === null) {
-            return response()->json(['error' => 'Impossível realizar a atualização, o recurso solicitado não existe.'], 404);
+            return response()->json(['error' => 'Impossível realizar a remoção, o recurso solicitado não existe.'], 404);
         }
 
         $cityGroup->delete();
 
-        return response()->json(['message' => 'O grupo de cidades foi removida com sucesso.'], 200);
+        return response()->json(['message' => 'O grupo de cidades foi removido com sucesso.'], 200);
     }
 }

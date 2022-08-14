@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\City;
 use Illuminate\Http\Request;
 
+use function PHPUnit\Framework\isEmpty;
+
 class CityController extends Controller
 {
     /**
@@ -28,9 +30,17 @@ class CityController extends Controller
      */
     public function store(Request $request)
     {
-        $city = City::create($request->all());
+        $city = new City;
 
-        return response()->json($city, 201);
+        $request->validate($city->rules(), $city->feedback());
+
+        $citiesAlreadyExists = City::where('city', $request->city)->get(['city', 'uf'])->toArray();
+
+        if ($city->validadeCityAlreadyExists($citiesAlreadyExists, $request)) {
+            return response()->json(['error' => 'Cidade já cadastrada.'], 422);
+        }
+
+        return response()->json($city->create($request->all()), 201);
     }
 
     /**
@@ -41,7 +51,11 @@ class CityController extends Controller
      */
     public function show($id)
     {
-        $city = City::with('cityGroups')->findOrFail($id);
+        $city = City::with('cityGroups')->find($id);
+
+        if ($city === null) {
+            return response()->json(['error' => 'Cidade não encontrada.'], 404);
+        }
 
         return response()->json($city, 200);
     }
@@ -57,8 +71,16 @@ class CityController extends Controller
     {
         $city = City::find($id);
 
-        if ($city === null) {
+         if ($city === null) {
             return response()->json(['error' => 'Impossível realizar a atualização, o recurso solicitado não existe.'], 404);
+        }
+
+        $request->validate($city->rules(), $city->feedback());
+
+        $citiesAlreadyExists = City::where('city', $request->city)->get(['city', 'uf'])->toArray();
+
+        if ($city->validadeCityAlreadyExists($citiesAlreadyExists, $request)) {
+            return response()->json(['error' => 'Cidade já cadastrada.'], 422);
         }
 
         $city->update($request->all());
@@ -77,7 +99,7 @@ class CityController extends Controller
         $city = City::find($id);
 
         if ($city === null) {
-            return response()->json(['error' => 'Impossível realizar a atualização, o recurso solicitado não existe.'], 404);
+            return response()->json(['error' => 'Impossível realizar a remoção, o recurso solicitado não existe.'], 404);
         }
 
         $city->delete();

@@ -30,7 +30,7 @@ class CampaignController extends Controller
     {
         $campaign = new Campaign;
 
-        $request->validate($campaign->rules());
+        $request->validate($campaign->rules(), $campaign->feedback());
 
         return response()->json($campaign->create($request->all()), 201);
     }
@@ -43,7 +43,11 @@ class CampaignController extends Controller
      */
     public function show($id)
     {
-        $campaign = Campaign::with('products')->findOrFail($id);
+        $campaign = Campaign::with('products')->find($id);
+
+        if ($campaign === null) {
+            return response()->json(['error' => 'Campanha não encontrada.'], 404);
+        }
 
         return response()->json($campaign, 200);
     }
@@ -57,11 +61,7 @@ class CampaignController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $campaign = new Campaign;
-
-        $request->validate($campaign->rules());
-
-        $campaign->find($id);
+        $campaign = Campaign::find($id);
 
         if ($campaign === null) {
             return response()->json(['error' => 'Impossível realizar a atualização, o recurso solicitado não existe.'], 404);
@@ -83,7 +83,7 @@ class CampaignController extends Controller
         $campaign = Campaign::find($id);
 
         if ($campaign === null) {
-            return response()->json(['error' => 'Impossível realizar a atualização, o recurso solicitado não existe.'], 404);
+            return response()->json(['error' => 'Impossível realizar a remoção, o recurso solicitado não existe.'], 404);
         }
 
         $campaign->delete();

@@ -17,14 +17,27 @@ class City extends Model
     public function rules()
     {
         return [
-            // 'marca_id' => 'exists:marcas,id',
-            // 'nome' => 'required|unique:modelos,nome,' . $this->id . '|min:3',
-            // 'imagem' => 'required|file|mimes:png,jpeg,jpg',
-            // 'numero_portas' => 'required|integer|digits_between:1,5',
-            // 'lugares' => 'required|integer|digits_between:1,20',
-            // 'air_bag' => 'required|boolean',
-            // 'abs' => 'required|boolean' //true, false , 1, 0, "1", "0"
+            'city_group_id' => 'required|exists:city_groups,id',
+            'city' => 'required',
+            'uf' => 'required',
         ];
+    }
+
+    public function feedback() {
+        return [
+            'required' => 'O campo :attribute é obrigatório.',
+            'city_group_id.exists' => 'O grupo selecionado não foi encontrado.',
+        ];
+    }
+
+    public function validadeCityAlreadyExists($citiesAlreadyExists, $request) {
+        if ($citiesAlreadyExists) {
+            foreach ($citiesAlreadyExists as $alreadyExistsCity) {
+                if ($alreadyExistsCity['city'] == $request->city && $alreadyExistsCity['uf'] == $request->uf) {
+                    return true;
+                }
+            }
+        }
     }
 
     public function cityGroups()

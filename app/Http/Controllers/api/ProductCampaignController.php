@@ -33,7 +33,7 @@ class ProductCampaignController extends Controller
     {
         $productCampaign = new ProductCampaign;
 
-        $request->validate($productCampaign->rules());
+        $request->validate($productCampaign->rules(), $productCampaign->feedback());
 
         if ($request->discount) {
             $productPrice = Product::findOrFail($request->product_id)->price;
@@ -61,7 +61,11 @@ class ProductCampaignController extends Controller
      */
     public function show($id)
     {
-        $productCampaign = ProductCampaign::findOrFail($id);
+        $productCampaign = ProductCampaign::find($id);
+
+        if ($productCampaign === null) {
+            return response()->json(['error' => 'Recurso não encontrado.'], 404);
+        }
 
         return response()->json($productCampaign, 200);
     }
@@ -108,7 +112,7 @@ class ProductCampaignController extends Controller
         $productCampaign = ProductCampaign::find($id);
 
         if ($productCampaign === null) {
-            return response()->json(['error' => 'Impossível realizar a atualização, o recurso solicitado não existe.'], 404);
+            return response()->json(['error' => 'Impossível realizar a remoção, o recurso solicitado não existe.'], 404);
         }
 
         $productCampaign->delete();

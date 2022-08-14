@@ -28,9 +28,11 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $product = Product::create($request->all());
+        $product = new Product;
 
-        return response()->json($product, 201);
+        $request->validate($product->rules(), $product->feedback());
+
+        return response()->json($product->create($request->all()), 201);
     }
 
     /**
@@ -41,7 +43,11 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::with('campaigns')->findOrFail($id);
+        $product = Product::with('campaigns')->find($id);
+
+        if ($product === null) {
+            return response()->json(['error' => 'Produto não encontrada.'], 404);
+        }
 
         return response()->json($product, 200);
     }
@@ -77,7 +83,7 @@ class ProductController extends Controller
         $product = Product::find($id);
 
         if ($product === null) {
-            return response()->json(['error' => 'Impossível realizar a atualização, o recurso solicitado não existe.'], 404);
+            return response()->json(['error' => 'Impossível realizar a remoção, o recurso solicitado não existe.'], 404);
         }
 
         $product->delete();

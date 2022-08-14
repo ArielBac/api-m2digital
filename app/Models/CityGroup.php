@@ -15,7 +15,14 @@ class CityGroup extends Model
     public function rules()
     {
         return [
-            'city_group' => 'required'
+            'city_group' => 'required|unique:city_groups',
+        ];
+    }
+
+    public function feedback() {
+        return [
+            'required' => 'O campo :attribute é obrigatório.',
+            'city_group.unique' => 'Este grupo já existe.',
         ];
     }
 
