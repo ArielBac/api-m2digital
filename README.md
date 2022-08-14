@@ -5,8 +5,8 @@
 - Banco de dados PostgreSQL.
 - Utilizei o pacote Sail, do próprio Laravel, para a utilização do Docker. O Sail já traz os arquivos do Docker e docker-compose pré configurados.
 - Esquema de tabelas e relacionamentos:
-    ![tables](https://user-images.githubusercontent.com/61114074/184548872-bc306108-2df9-4784-9cbb-b3f52ae7670b.png)
-  
+
+    <img src="https://user-images.githubusercontent.com/61114074/184551379-3f9b58ac-2340-4c93-8f8c-a2fb28a471cb.png" alt="tables" height="800" />
 
 ### OBS:
 
