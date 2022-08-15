@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\City;
 use Illuminate\Http\Request;
 
-use function PHPUnit\Framework\isEmpty;
-
 class CityController extends Controller
 {
     /**

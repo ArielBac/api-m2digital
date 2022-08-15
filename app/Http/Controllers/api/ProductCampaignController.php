@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Campaign;
 use App\Models\Product;
 use App\Models\ProductCampaign;
 use Carbon\Carbon;
