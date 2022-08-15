@@ -1,64 +1,48 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## Teste M2 Digital:
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+- SO Ubuntu 20.04.
+- Versão 9.x do Laravel.
+- Banco de dados PostgreSQL.
+- Utilizei o pacote Sail, do próprio Laravel, para a utilização do Docker. O Sail já traz os arquivos do Docker e docker-compose pré configurados.
+- Esquema de tabelas e relacionamentos:
 
-## About Laravel
+    <img src="https://user-images.githubusercontent.com/61114074/184551379-3f9b58ac-2340-4c93-8f8c-a2fb28a471cb.png" alt="tables" height="800" />
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### OBS:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- As portas 80 e 5432 precisam estar disponíveis, ou será preciso alterá-las no arquivo docker-compose.yml, na raíz do projeto.
+- Para o feedback() do método validate() funcionar corretamente, o cliente precisa enviar o Accept no cabeçalho da requisição, com o valor application/json.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Instruções para a execução do projeto
 
-## Learning Laravel
+- Clone a branch master para um diretório de sua preferência.
+- No diretório do projeto, execute os comandos:
+    
+   - `.vendor/bin/sail up`
+   - `./vendor/bin/sail composer install`
+   - `.vendor/bin/sail artisan migrate`
+ 
+ ### Rotas
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Rota                                 | Método HTTP    | Dados da requisição
+------------------------------------ | -------------- | --------
+localhost/api/city-groups            | POST           | city_group
+localhost/api/city-groups/{id}       | PUT,PATCH      | city_group
+localhost/api/city-groups            | GET            | 
+localhost/api/city-groups{id}        | GET            | 
+localhost/api/cities                 | POST           | city_group_id, city, uf
+localhost/api/cities{id}             | PUT,PATCH      | city_group_id, city, uf
+localhost/api/cities                 | GET            | 
+localhost/api/cities{id}             | GET            | 
+localhost/api/campaigns              | POST           | city_group_id, campaign, description
+localhost/api/campaigns{id}          | PUT,PATCH      | city_group_id, campaign, description
+localhost/api/campaigns              | GET            | 
+localhost/api/campaigns{id}          | GET            | 
+localhost/api/products               | POST           | product, description, price
+localhost/api/products{id}           | PUT,PATCH      | product, description, price
+localhost/api/products               | GET            | 
+localhost/api/products{id}           | GET            | 
+localhost/api/products-campaigns     | POST           | product_id, campaign_id, discount
+localhost/api/products-campaigns{id} | PUT,PATCH      | discount
+localhost/api/products-campaigns     | GET            | 
+localhost/api/products-campaigns{id} | GET            | 
