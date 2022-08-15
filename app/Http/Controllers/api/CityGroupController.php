@@ -46,7 +46,7 @@ class CityGroupController extends Controller
         $cityGroup = CityGroup::with('cities', 'campaign')->find($id);
 
         if ($cityGroup === null) {
-            return response()->json(['error' => 'Grupo não encontrado.'], 404);
+            return response()->json(['error' => 'Grupo de cidades não encontrado.'], 404);
         }
 
         return response()->json($cityGroup, 200);
@@ -64,7 +64,7 @@ class CityGroupController extends Controller
         $cityGroup = CityGroup::find($id);
 
         if ($cityGroup === null) {
-            return response()->json(['error' => 'Impossível realizar a atualização, o recurso solicitado não existe.'], 404);
+            return response()->json(['error' => 'Impossível realizar a atualização, o grupo de cidades solicitado não existe.'], 404);
         }
 
         $request->validate($cityGroup->rules(), $cityGroup->feedback());
@@ -85,7 +85,7 @@ class CityGroupController extends Controller
         $cityGroup = CityGroup::find($id);
 
         if ($cityGroup === null) {
-            return response()->json(['error' => 'Impossível realizar a remoção, o recurso solicitado não existe.'], 404);
+            return response()->json(['error' => 'Impossível realizar a remoção, o grupo de cidades solicitado não existe.'], 404);
         }
 
         $cityGroup->delete();

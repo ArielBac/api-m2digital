@@ -72,7 +72,7 @@ class CityController extends Controller
         $city = City::find($id);
 
          if ($city === null) {
-            return response()->json(['error' => 'Impossível realizar a atualização, o recurso solicitado não existe.'], 404);
+            return response()->json(['error' => 'Impossível realizar a atualização, a cidade solicitada não existe.'], 404);
         }
 
         $request->validate($city->rules(), $city->feedback());
@@ -99,7 +99,7 @@ class CityController extends Controller
         $city = City::find($id);
 
         if ($city === null) {
-            return response()->json(['error' => 'Impossível realizar a remoção, o recurso solicitado não existe.'], 404);
+            return response()->json(['error' => 'Impossível realizar a remoção, a cidade solicitada não existe.'], 404);
         }
 
         $city->delete();

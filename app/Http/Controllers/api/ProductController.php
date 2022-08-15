@@ -64,7 +64,7 @@ class ProductController extends Controller
         $product = Product::find($id);
 
         if ($product === null) {
-            return response()->json(['error' => 'Impossível realizar a atualização, o recurso solicitado não existe.'], 404);
+            return response()->json(['error' => 'Impossível realizar a atualização, o produto solicitado não existe.'], 404);
         }
 
         $product->update($request->all());
@@ -83,7 +83,7 @@ class ProductController extends Controller
         $product = Product::find($id);
 
         if ($product === null) {
-            return response()->json(['error' => 'Impossível realizar a remoção, o recurso solicitado não existe.'], 404);
+            return response()->json(['error' => 'Impossível realizar a remoção, o produto solicitado não existe.'], 404);
         }
 
         $product->delete();

@@ -64,7 +64,7 @@ class CampaignController extends Controller
         $campaign = Campaign::find($id);
 
         if ($campaign === null) {
-            return response()->json(['error' => 'Impossível realizar a atualização, o recurso solicitado não existe.'], 404);
+            return response()->json(['error' => 'Impossível realizar a atualização, a campanha solicitada não existe.'], 404);
         }
 
         $campaign->update($request->all());
@@ -83,7 +83,7 @@ class CampaignController extends Controller
         $campaign = Campaign::find($id);
 
         if ($campaign === null) {
-            return response()->json(['error' => 'Impossível realizar a remoção, o recurso solicitado não existe.'], 404);
+            return response()->json(['error' => 'Impossível realizar a remoção, a campanha solicitada não existe.'], 404);
         }
 
         $campaign->delete();
