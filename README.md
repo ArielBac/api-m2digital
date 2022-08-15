@@ -11,6 +11,7 @@
 ### OBS:
 
 - As portas 80 e 5432 precisam estar disponíveis, ou será preciso alterá-las no arquivo docker-compose.yml, na raíz do projeto.
+- As configurações de conexão com o banco de dados, presentes no arquivo .env, seguem o padrão pré-estabelecido na criação do projeto Laravel utilizando o Sail.
 - Para o feedback() do método validate() funcionar corretamente, o cliente precisa enviar o Accept no cabeçalho da requisição, com o valor application/json.
 
 ### Instruções para a execução do projeto
