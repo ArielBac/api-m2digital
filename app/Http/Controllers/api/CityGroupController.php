@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CityGroupResource;
+use App\Http\Resources\CityGroupsCollection;
 use App\Models\CityGroup;
 use Illuminate\Http\Request;
 
@@ -15,9 +17,10 @@ class CityGroupController extends Controller
      */
     public function index()
     {
-        $cityGroups = CityGroup::with('cities', 'campaign')->get();
+        return new CityGroupsCollection(CityGroup::all());
+        // $cityGroups = CityGroup::with('cities', 'campaign')->get();
 
-        return response()->json($cityGroups, 200);
+        // return response()->json($cityGroups, 200);
     }
 
     /**
@@ -32,64 +35,67 @@ class CityGroupController extends Controller
 
         $request->validate($cityGroup->rules(), $cityGroup->feedback());
 
-        return response()->json($cityGroup->create($request->all()),201);
+        return response()->json($cityGroup->create($request->all()), 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  CityGroup  $cityGroup
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($cityGroup)
     {
-        $cityGroup = CityGroup::with('cities', 'campaign')->find($id);
+        $cityGroup = CityGroup::with('cities', 'campaign')->find($cityGroup);
 
-        if ($cityGroup === null) {
-            return response()->json(['error' => 'Grupo de cidades não encontrado.'], 404);
+        if ($cityGroup) {
+            return new CityGroupResource($cityGroup);
+            // return response()->json($cityGroup, 200);
         }
 
-        return response()->json($cityGroup, 200);
+        return response()->json([
+            'error' => 'Grupo de cidades não encontrado.'
+        ], 404);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  CityGroup  $cityGroup
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $cityGroup)
     {
-        $cityGroup = CityGroup::find($id);
+        $cityGroup = CityGroup::find($cityGroup);
 
-        if ($cityGroup === null) {
-            return response()->json(['error' => 'Impossível realizar a atualização, o grupo de cidades solicitado não existe.'], 404);
+        if ($cityGroup) {
+            $request->validate($cityGroup->rules(), $cityGroup->feedback());
+
+            $cityGroup->update($request->all());
+
+            return response()->json($cityGroup, 200);
         }
 
-        $request->validate($cityGroup->rules(), $cityGroup->feedback());
-
-        $cityGroup->update($request->all());
-
-        return response()->json($cityGroup, 200);
+        return response()->json(['error' => 'Impossível realizar a atualização, o grupo de cidades solicitado não existe.'], 404);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  CityGroup  $cityGroup
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($cityGroup)
     {
-        $cityGroup = CityGroup::find($id);
+        $cityGroup = CityGroup::find($cityGroup);
 
-        if ($cityGroup === null) {
-            return response()->json(['error' => 'Impossível realizar a remoção, o grupo de cidades solicitado não existe.'], 404);
+        if ($cityGroup) {
+            $cityGroup->delete();
+
+            return response()->json(['message' => 'O grupo de cidades foi removido com sucesso.'], 200);
         }
 
-        $cityGroup->delete();
-
-        return response()->json(['message' => 'O grupo de cidades foi removido com sucesso.'], 200);
+        return response()->json(['error' => 'Impossível realizar a remoção, o grupo de cidades solicitado não existe.'], 404);
     }
 }

@@ -40,7 +40,7 @@ class City extends Model
         }
     }
 
-    public function cityGroups()
+    public function cityGroup()
     {
         return $this->belongsTo(CityGroup::class, 'city_group_id', 'id');
     }

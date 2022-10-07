@@ -19,19 +19,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// City Routes
-Route::apiResource('cities', CityController::class);
-
-// CityGroup Routes
-Route::apiResource('city-groups', CityGroupController::class);
-
-// Campaign Routes
-Route::apiResource('campaigns', CampaignController::class);
-
-// Product Routes
-Route::apiResource('products', ProductController::class);
-
-// ProductCampaign Routes
-Route::apiResource('products-campaigns', ProductCampaignController::class);
-
-
+Route::apiResources([
+    'cities' => CityController::class,
+    'city-groups' => CityGroupController::class,
+    'campaigns' => CampaignController::class,
+    'products' => ProductController::class,
+    'products-campaigns' => ProductCampaignController::class,
+]);
