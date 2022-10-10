@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
+use App\Http\Resources\ProductsCollection;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -15,9 +17,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('campaigns')->get();
+        return new ProductsCollection(Product::all());
+        // $products = Product::with('campaigns')->get();
 
-        return response()->json($products, 200);
+        // return response()->json($products, 200);
     }
 
     /**
@@ -38,56 +41,57 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($product)
     {
-        $product = Product::with('campaigns')->find($id);
+        $product = Product::with('campaigns')->find($product);
 
-        if ($product === null) {
-            return response()->json(['error' => 'Produto não encontrada.'], 404);
+        if ($product) {
+            return new ProductResource($product);
+            // return response()->json($product, 200);
         }
 
-        return response()->json($product, 200);
+        return response()->json(['error' => 'Produto não encontrada.'], 404);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $product)
     {
-        $product = Product::find($id);
+        $product = Product::find($product);
 
-        if ($product === null) {
-            return response()->json(['error' => 'Impossível realizar a atualização, o produto solicitado não existe.'], 404);
+        if ($product) {
+            $product->update($request->all());
+
+            return response()->json($product, 200);
         }
 
-        $product->update($request->all());
-
-        return response()->json($product, 200);
+        return response()->json(['error' => 'Impossível realizar a atualização, o produto solicitado não existe.'], 404);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($product)
     {
-        $product = Product::find($id);
+        $product = Product::find($product);
 
-        if ($product === null) {
-            return response()->json(['error' => 'Impossível realizar a remoção, o produto solicitado não existe.'], 404);
+        if ($product) {
+            $product->delete();
+
+            return response()->json(['message' => 'O produto foi removida com sucesso.'], 200);
         }
 
-        $product->delete();
-
-        return response()->json(['message' => 'O produto foi removida com sucesso.'], 200);
+        return response()->json(['error' => 'Impossível realizar a remoção, o produto solicitado não existe.'], 404);
     }
 }

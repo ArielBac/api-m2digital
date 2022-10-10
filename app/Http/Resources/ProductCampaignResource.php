@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CityGroupResource extends JsonResource
+class ProductCampaignResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,9 +16,8 @@ class CityGroupResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'city_group' => $this->city_group,
-            'cities' => new CitiesCollection($this->whenLoaded('cities')),
-            'campaign' => new CampaignResource($this->whenLoaded('campaign')),
+            'discount' => $this->discount,
+            'price_with_discount' => $this->price_with_discount,
         ];
     }
 }

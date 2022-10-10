@@ -19,9 +19,9 @@
 - Clone a branch master para um diretório de sua preferência.
 - No diretório do projeto, execute os comandos:
     
-   - `.vendor/bin/sail up`
+   - `./vendor/bin/sail up`
    - `./vendor/bin/sail composer install`
-   - `.vendor/bin/sail artisan migrate`
+   - `./vendor/bin/sail artisan migrate`
  
  ### Rotas
 

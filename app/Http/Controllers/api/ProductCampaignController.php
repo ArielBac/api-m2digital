@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductCampaignResource;
+use App\Http\Resources\ProductsCampaignsCollection;
 use App\Models\Product;
 use App\Models\ProductCampaign;
 use Carbon\Carbon;
@@ -17,9 +19,10 @@ class ProductCampaignController extends Controller
      */
     public function index()
     {
-        $productsCampaigns = ProductCampaign::all();
+        return new ProductsCampaignsCollection(ProductCampaign::all());
+        // $productsCampaigns = ProductCampaign::all();
 
-        return response()->json($productsCampaigns, 200);
+        // return response()->json($productsCampaigns, 200);
     }
 
     /**
@@ -55,30 +58,31 @@ class ProductCampaignController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  ProductCampaign  $productCampaign
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($productCampaign)
     {
-        $productCampaign = ProductCampaign::find($id);
+        $productCampaign = ProductCampaign::find($productCampaign);
 
-        if ($productCampaign === null) {
-            return response()->json(['error' => 'Recurso não encontrado.'], 404);
+        if ($productCampaign) {
+            return new ProductCampaignResource($productCampaign);
+            // return response()->json($productCampaign, 200);
         }
 
-        return response()->json($productCampaign, 200);
+        return response()->json(['error' => 'Recurso não encontrado.'], 404);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  ProductCampaign  $productCampaign
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $productCampaign)
     {
-        $productCampaign = ProductCampaign::find($id);
+        $productCampaign = ProductCampaign::find($productCampaign);
 
         if ($productCampaign === null) {
             return response()->json(['error' => 'Impossível realizar a atualização, o recurso solicitado não existe.'], 404);
@@ -103,19 +107,19 @@ class ProductCampaignController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  ProductCampaign  $productCampaign
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($productCampaign)
     {
-        $productCampaign = ProductCampaign::find($id);
+        $productCampaign = ProductCampaign::find($productCampaign);
 
-        if ($productCampaign === null) {
-            return response()->json(['error' => 'Impossível realizar a remoção, o recurso solicitado não existe.'], 404);
+        if ($productCampaign) {
+            $productCampaign->delete();
+
+            return response()->json(['message' => 'Exclusão realizada com sucesso.'], 200);
         }
 
-        $productCampaign->delete();
-
-        return response()->json(['message' => 'Exclusão realizada com sucesso.'], 200);
+        return response()->json(['error' => 'Impossível realizar a remoção, o recurso solicitado não existe.'], 404);
     }
 }
