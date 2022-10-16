@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CityGroupStoreRequest;
+use App\Http\Requests\CityGroupUpdateRequest;
 use App\Http\Resources\CityGroupResource;
 use App\Http\Resources\CityGroupsCollection;
 use App\Models\CityGroup;
@@ -29,13 +31,11 @@ class CityGroupController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CityGroupStoreRequest $request)
     {
-        $cityGroup = new CityGroup;
+        $cityGroup = CityGroup::create($request->all());
 
-        $request->validate($cityGroup->rules(), $cityGroup->feedback());
-
-        return response()->json($cityGroup->create($request->all()), 201);
+        return response()->json($cityGroup, 201);
     }
 
     /**
@@ -65,13 +65,11 @@ class CityGroupController extends Controller
      * @param  CityGroup  $cityGroup
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $cityGroup)
+    public function update(CityGroupUpdateRequest $request, $cityGroup)
     {
         $cityGroup = CityGroup::find($cityGroup);
 
         if ($cityGroup) {
-            $request->validate($cityGroup->rules(), $cityGroup->feedback());
-
             $cityGroup->update($request->all());
 
             return response()->json($cityGroup, 200);

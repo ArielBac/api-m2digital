@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CityStoreAndUpdateRequest;
 use App\Http\Resources\CitiesCollection;
 use App\Http\Resources\CityResource;
 use App\Models\City;
@@ -29,19 +30,17 @@ class CityController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CityStoreAndUpdateRequest $request)
     {
-        $city = new City;
-
-        $request->validate($city->rules(), $city->feedback());
-
         $citiesAlreadyExists = City::where('city', $request->city)->get(['city', 'uf'])->toArray();
 
-        if ($city->validadeCityAlreadyExists($citiesAlreadyExists, $request)) {
+        if ($request->validadeCityAlreadyExists($citiesAlreadyExists, $request)) {
             return response()->json(['error' => 'Cidade já cadastrada.'], 422);
         }
 
-        return response()->json($city->create($request->all()), 201);
+        $city = City::create($request->all());
+
+        return response()->json($city, 201);
     }
 
     /**
@@ -69,19 +68,17 @@ class CityController extends Controller
      * @param  City  $city
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $city)
+    public function update(CityStoreAndUpdateRequest $request, $city)
     {
         $city = City::find($city);
 
-         if ($city === null) {
+        if ($city === null) {
             return response()->json(['error' => 'Impossível realizar a atualização, a cidade solicitada não existe.'], 404);
         }
 
-        $request->validate($city->rules(), $city->feedback());
-
         $citiesAlreadyExists = City::where('city', $request->city)->get(['city', 'uf'])->toArray();
 
-        if ($city->validadeCityAlreadyExists($citiesAlreadyExists, $request)) {
+        if ($request->validadeCityAlreadyExists($citiesAlreadyExists, $request)) {
             return response()->json(['error' => 'Cidade já cadastrada.'], 422);
         }
 

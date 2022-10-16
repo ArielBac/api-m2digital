@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductStoreRequest;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\ProductsCollection;
 use App\Models\Product;
@@ -29,13 +30,11 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductStoreRequest $request)
     {
-        $product = new Product;
+        $product = Product::create($request->all());
 
-        $request->validate($product->rules(), $product->feedback());
-
-        return response()->json($product->create($request->all()), 201);
+        return response()->json($product, 201);
     }
 
     /**

@@ -14,21 +14,6 @@ class Product extends Model
         'price',
     ];
 
-    public function rules()
-    {
-        return [
-            'product' => 'required',
-            'description' => 'required',
-            'price' => 'required',
-        ];
-    }
-
-    public function feedback() {
-        return [
-            'required' => 'O campo :attribute é obrigatório.',
-        ];
-    }
-
     public function campaigns()
     {
         return $this->belongsToMany(Campaign::class, 'products_campaigns', 'product_id', 'campaign_id');
