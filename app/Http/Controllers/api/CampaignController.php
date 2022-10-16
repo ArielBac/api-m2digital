@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CampaignStoreRequest;
 use App\Http\Resources\CampaignResource;
 use App\Http\Resources\CampaignsCollection;
 use App\Models\Campaign;
@@ -29,13 +30,11 @@ class CampaignController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CampaignStoreRequest $request)
     {
-        $campaign = new Campaign;
+        $campaign = Campaign::create($request->all());
 
-        $request->validate($campaign->rules(), $campaign->feedback());
-
-        return response()->json($campaign->create($request->all()), 201);
+        return response()->json($campaign, 201);
     }
 
     /**
